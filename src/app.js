@@ -7,6 +7,13 @@ var HelloWorldLayer = cc.Layer.extend({
 		cc.log("Mover Conejo");
 		var  juego = event.getCurrentTarget();
 		var ubicacion = location.getLocation();
+        
+             if(ubicacion.x<275)
+                ubicacion.x = 275;
+        
+             if(ubicacion.x > 675)
+                ubicacion.x = 675;
+        
 		juego.sprConejo.setPosition(ubicacion.x, size.height * 0.15);
 
 	},
