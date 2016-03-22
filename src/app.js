@@ -9,7 +9,6 @@ var HelloWorldLayer = cc.Layer.extend({
 	},
     moverConejo: function(location, event){
         var size = cc.winSize;
-		cc.log("Mover Conejo");
 		var  juego = event.getCurrentTarget();
 		var ubicacion = location.getLocation();
         
@@ -29,7 +28,7 @@ var HelloWorldLayer = cc.Layer.extend({
         
         console.log("agregando zanahoria");
         
-        var zanahoria = new cc.Sprite(res.zana_png);
+        var zanahoria = new cc.Sprite(res.zanahoria_png);
         var tamano = zanahoria.getContentSize().width;
         zanahoria.setPosition(columnas[this.random(0, 8)], size.height);
         zanahoria.setScale(0.7,0.7);
@@ -37,7 +36,7 @@ var HelloWorldLayer = cc.Layer.extend({
         zanahoria.setAnchorPoint(1, 1);
         
         //Movimiento
-		var moveto = cc.moveTo(this.random(1,9), zanahoria.getPositionX(), 0);
+		var moveto = cc.moveTo(3, zanahoria.getPositionX(), 0);
 		zanahoria.runAction(moveto);
         this.zanahorias.push(zanahoria);
 		
