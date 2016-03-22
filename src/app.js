@@ -2,6 +2,14 @@
 var HelloWorldLayer = cc.Layer.extend({
     sprFondo:null,
     sprConejo:null,
+    moverConejo: function(location, event){
+        var size = cc.winSize;
+		cc.log("Mover Conejo");
+		var  juego = event.getCurrentTarget();
+		var ubicacion = location.getLocation();
+		juego.sprConejo.setPosition(ubicacion.x, size.height * 0.15);
+
+	},
     ctor:function () {
         this._super();
         //Obteniendo el tamaño de la pantalla
@@ -9,7 +17,7 @@ var HelloWorldLayer = cc.Layer.extend({
 
         //posicionando la imagen de fondo
         this.sprFondo = new cc.Sprite(res.fondo_png);
-        this.sprFondo.setPosition(size.width / 2,size.height / 2);
+        this.sprFondo.setPosition(size.width / 2, size.height / 2);
         this.addChild(this.sprFondo, 0);
         
         //posicionando la imagen de fondo
@@ -17,6 +25,16 @@ var HelloWorldLayer = cc.Layer.extend({
         this.sprConejo.setPosition(size.width / 2,size.height * 0.15);
         this.addChild(this.sprConejo, 1);
 
+        //Eventos touch
+        cc.eventManager.addListener({
+			event: cc.EventListener.TOUCH_ONE_BY_ONE,
+            onTouchBegan: function(touch, event) {
+                cc.log(event.getCurrentTarget());
+                return true;
+            },
+			onTouchMoved: this.moverConejo
+			
+		}, this);
 
         return true;
     }
