@@ -56,7 +56,7 @@ var HelloWorldLayer = cc.Layer.extend({
         zanahoria.setAnchorPoint(1, 1);
         
         //Movimiento de zanahorias
-		var moveto = cc.moveTo(3, zanahoria.getPositionX(), 0);
+		var moveto = cc.moveTo(1, zanahoria.getPositionX(), 0);
 		zanahoria.runAction(moveto);
         this.zanahorias.push(zanahoria);
 		
@@ -75,7 +75,7 @@ var HelloWorldLayer = cc.Layer.extend({
         bomba.setAnchorPoint(1, 1);
         
       //movimiento de bombas
-		var moveto = cc.moveTo(this.random(1,2), bomba.getPositionX(), 0);
+		var moveto = cc.moveTo(1, bomba.getPositionX(), 0);
 		bomba.runAction(moveto);
         this.bombas.push(bomba);
 		
@@ -92,6 +92,7 @@ var HelloWorldLayer = cc.Layer.extend({
                 bomba.setVisible(false);
                 this.ups--;
                 cc.log("Comiendo Bomba");
+                
             }
         }
         
@@ -104,15 +105,16 @@ var HelloWorldLayer = cc.Layer.extend({
                 zanahoria.setVisible(false);
                 this.gameScore+=1;
                 cc.log("Comiendo Zanahoria");
+                cc.log(this.gameScore);
             }
         }
-        /*if(this.ups<=0){
-            cc.log("PERDISTE!, tu puntuacion fue:"+ this.gameScore);
+        if(this.ups<=0){
+            alert("PERDISTE!, tu puntuacion fue:"+ this.gameScore);
             this.gameScore=0;
             this.ups=3;
             this.zanahorias=[];
             this.bombas=[];
-        }*/
+        }
     },
     ctor:function () {
         this._super();
@@ -129,10 +131,10 @@ var HelloWorldLayer = cc.Layer.extend({
         this.sprConejo.setPosition(size.width / 2,size.height * 0.15);
         this.addChild(this.sprConejo, 1);
         
-        //Evento automatizado para que agregue zanahorias y bombas
+        //Evento automatizado para que agregue zanahorias, bombas y chequee las colisiones.
         this.schedule(this.creaZanahorias,1);
          this.schedule(this.creaBombas,4);
-         this.schedule(this.score,0.01);
+         this.schedule(this.score,0.3);
 
         //Eventos touch
         cc.eventManager.addListener({
