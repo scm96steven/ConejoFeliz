@@ -2,12 +2,31 @@
 var HelloWorldLayer = cc.Layer.extend({
     sprFondo:null,
     sprConejo:null,
+    ups:3,
+    gameScore:0,
     zanahorias: [],
      bombas: [],
         random: function getRandomInt(min, max) {
     	return Math.floor(Math.random() * (max - min + 1)) + min;
 	},
+    function(location, event){
+        
+        
+        
+        
+        
+        },
+    
+    onTouch: function(touch, event) {
+        var size = cc.winSize;
+                cc.log(touch.getLocation());
+                
+                return true;
+            },
     moverConejo: function(location, event){
+          
+        var score;
+        
         var size = cc.winSize;
 		var  juego = event.getCurrentTarget();
 		var ubicacion = location.getLocation();
@@ -19,7 +38,8 @@ var HelloWorldLayer = cc.Layer.extend({
                 ubicacion.x = 675;
         
 		juego.sprConejo.setPosition(ubicacion.x, size.height * 0.15);
-        this.creaZanahorias;
+		
+        
 
 	},
     creaZanahorias: function(){
@@ -35,7 +55,7 @@ var HelloWorldLayer = cc.Layer.extend({
         this.addChild(zanahoria, 1);
         zanahoria.setAnchorPoint(1, 1);
         
-        //Movimiento
+        //Movimiento de zanahorias
 		var moveto = cc.moveTo(3, zanahoria.getPositionX(), 0);
 		zanahoria.runAction(moveto);
         this.zanahorias.push(zanahoria);
@@ -54,12 +74,46 @@ var HelloWorldLayer = cc.Layer.extend({
         this.addChild(bomba, 1);
         bomba.setAnchorPoint(1, 1);
         
-      //movimiento
-		var moveto = cc.moveTo(this.random(1,9), bomba.getPositionX(), 0);
+      //movimiento de bombas
+		var moveto = cc.moveTo(this.random(1,2), bomba.getPositionX(), 0);
 		bomba.runAction(moveto);
         this.bombas.push(bomba);
 		
 	},
+    score: function() {
+        
+        
+        for(var bomba of this.bombas)
+        {
+            var bombaRect = bomba.getBoundingBox();
+            var conejoRect = this.sprConejo.getBoundingBox();
+            
+            if(cc.rectIntersectsRect(bombaRect, conejoRect)){
+                bomba.setVisible(false);
+                this.ups--;
+                cc.log("Comiendo Bomba");
+            }
+        }
+        
+        for(var zanahoria of this.zanahorias)
+        {
+            var zanahoriaRect = zanahoria.getBoundingBox();
+            var conejoRect = this.sprConejo.getBoundingBox();
+            
+            if(cc.rectIntersectsRect(zanahoriaRect,conejoRect)){
+                zanahoria.setVisible(false);
+                this.gameScore+=1;
+                cc.log("Comiendo Zanahoria");
+            }
+        }
+        /*if(this.ups<=0){
+            cc.log("PERDISTE!, tu puntuacion fue:"+ this.gameScore);
+            this.gameScore=0;
+            this.ups=3;
+            this.zanahorias=[];
+            this.bombas=[];
+        }*/
+    },
     ctor:function () {
         this._super();
         //Obteniendo el tamaño de la pantalla
@@ -78,15 +132,12 @@ var HelloWorldLayer = cc.Layer.extend({
         //Evento automatizado para que agregue zanahorias y bombas
         this.schedule(this.creaZanahorias,1);
          this.schedule(this.creaBombas,4);
-        
+         this.schedule(this.score,0.01);
 
         //Eventos touch
         cc.eventManager.addListener({
 			event: cc.EventListener.TOUCH_ONE_BY_ONE,
-            onTouchBegan: function(touch, event) {
-                cc.log(event.getCurrentTarget());
-                return true;
-            },
+            onTouchBegan: this.onTouch,
 			onTouchMoved: this.moverConejo
 			
 		}, this);
